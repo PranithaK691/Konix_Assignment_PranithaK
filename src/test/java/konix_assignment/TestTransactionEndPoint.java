@@ -20,6 +20,11 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertEquals;
 
+/**
+ * Author: Pranitha Kasam(pranithak691@gmail.com)
+ * Usage: This test class will test transaction creation API
+ * and get transaction API of the Swagger: https://x8ki-letl-twmt.n7.xano.io/apidoc:gHPd8le5/
+ */
 public class TestTransactionEndPoint{
     private final static Logger logger = Logger.getLogger(Main.class);
     private final String coin1 = "INR";
@@ -29,6 +34,7 @@ public class TestTransactionEndPoint{
     Random random = new Random();
     private int coin1Amount =  random.nextInt(1,1000);
     private int coin2Amount =  random.nextInt(1,1000);
+   //Initializing variables globally
     private int id = 0;
     private LocalDateTime createdAt =  LocalDateTime.now();
     @Test
@@ -66,7 +72,7 @@ public class TestTransactionEndPoint{
         .extract().body().path("id");
         logger.info("POST API id: "+id);
     }
-
+    //Testing Get Route after completion of Post Route
     @Test (dependsOnMethods = "testTransactionPOSTRoute")
     public void testTransactionGETRoute() throws InterruptedException {
         // RESTAssured base URI
@@ -75,6 +81,7 @@ public class TestTransactionEndPoint{
         //disable URL encoding to escape colon symbol encoding in baseURI
         RequestSpecification mySpec = new RequestSpecBuilder().setUrlEncodingEnabled(false).build();
 
+        // Making API call and asserting the actual results with expected results
         ValidatableResponse getApiResponse = given().spec(mySpec).get(String.valueOf(id))
                 .then().statusCode(200)
                 .body("id", equalTo(id))
